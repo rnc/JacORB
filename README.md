@@ -10,7 +10,7 @@ http://www.iconarchive.com/show/fugue-icons-by-yusuke-kamiyamane.html
 
 [tip]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/tick-circle-frame-icon.png "Tip"
 [warn]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/exclamation-icon.png "Warning"
-[error]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/minus-circle-icon.png "Error"
+[err]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/minus-circle-icon.png "Error"
 
 
 
@@ -229,7 +229,7 @@ More information on pulling changes from remote, forked repos can be found in [C
 *  If you see "non-fast-forward updates were rejected" you shall never use "force" on upstream! It means that another patch was merged before you and you have to update your master again, and rebase again.
 *  "force" is allowed only in special maintenance circumstances. If you find you're needing it to handle a pull request, then you're doing it wrong, and the mistake might be a dangerous one! It's like the good rule of never commit when you're drunk (coding is allowed).
 
-![Error][error] __Never use force on git push__ Using _-f_ while pushing on a shared repository such as _upstream_ you could effectively erase other committed patches. No-one shall ever use this option unless unanimously approved on the public mailing list: the most dangerous aspect of it is that nobody gets any notification if this happens, and we might think issues are solved but you silently removed the fix and it's history from the repository.
+![Error][err] __Never use force on git push__ Using _-f_ while pushing on a shared repository such as _upstream_ you could effectively erase other committed patches. No-one shall ever use this option unless unanimously approved on the public mailing list: the most dangerous aspect of it is that nobody gets any notification if this happens, and we might think issues are solved but you silently removed the fix and it's history from the repository.
 {warning}
 
 #### Cutting releases
