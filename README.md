@@ -85,7 +85,7 @@ The section on *Public Small Project* in [Chapter 5, Section 2](http://progit.or
 
 ##### A worked example
 
-1. Make sure your master is synced up with upstream. See [this section](#If you have forked upstream) for how to do this
+1. Make sure your master is synced up with upstream. See [this section](#if-you-have-forked-upstream) for how to do this
 2. Create new branch for your topic and switch to it. For the example issue, BZ-1234:
 
 ```
@@ -175,7 +175,7 @@ Developer A pushes `bz244` to personal JacORB fork. For example:
 
 A frequent contributor will only ever submit patches via a pull requests. The pull request will be submitted via GitHub.
 
-Frequent contributors should *always* fork the upstream project on GitHub and work off a clone of this fork. This is very similar to [Creating a pull request on GitHub](#Creating a pull request on GitHub) workflow used by a [#Occasional Contributor](#Occasional Contributor).
+Frequent contributors should *always* fork the upstream project on GitHub and work off a clone of this fork. This is very similar to [Creating a pull request on GitHub](#creating-a-pull-request-on-github) workflow used by a [#Occasional Contributor](#occasional-contributor).
 
 ![Warning][warn] All JacORB core developers are considered frequent contributors and work off personal forks of the upstream repository. This allows for complex features to be developed in parallel without tripping up over one another. This process is certainly not restricted to just JacORB core developers; any contributor is welcome to also participate in this manner.
 
