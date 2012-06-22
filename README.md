@@ -10,10 +10,8 @@ http://www.iconarchive.com/show/fugue-icons-by-yusuke-kamiyamane.html
 
 [tip]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/tick-circle-frame-icon.png "Tip"
 [warn]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/exclamation-icon.png "Warning"
-[error]: http://www.iconarchive.com/show/fugue-icons-by-yusuke-kamiyamane/minus-circle-icon.html "Error"
+[error]: http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/minus-circle-icon.png "Error"
 
-<!-- <div class="success" style="border: 1px solid; margin: 10px 0px; padding:15px 10px 15px 50px; background-repeat: no-repeat; background-position: 10px ; center; color: #4F8A10; background-color: #FFFFCE; background-image: url('http://icons.iconarchive.com/icons/yusuke-kamiyamane/fugue/16/exclamation-icon.png');"> -->
-<!-- </div> -->
 
 
 # JacORB #
@@ -30,7 +28,7 @@ These guidelines are for all developers, whether occasional or regular. They hav
 
 ## Pre-requisites
 
-This document assumes some working knowledge of git. We recommend Scott Chacon's excellent [Pro Git](http://progit.org) as a valuable piece of background reading. The book is released under the Creative Commons license and can be downloaded in electronic form for free. At very least, we recommend that [Chapter 2](http://progit.org/book/ch2-0.html), [Chapter 3](http://progit.org/book/ch3-0.html) and [Chapter 5](http://progit.org/book/ch5-0.html) of Pro Git are read before proceeding.
+This document assumes some working knowledge of git. We recommend Scott Chacon's excellent [Pro Git](http://progit.org) a a valuable piece of background reading. The book is released under the Creative Commons license and can be downloaded in electronic form for free. At very least, we recommend that [Chapter 2](http://progit.org/book/ch2-0.html), [Chapter 3](http://progit.org/book/ch3-0.html) and [Chapter 5](http://progit.org/book/ch5-0.html) of Pro Git are read before proceeding.
 
 ## Repositories
 
@@ -87,21 +85,27 @@ The section on *Public Small Project* in [Chapter 5, Section 2](http://progit.or
 
 ##### A worked example
 
-1. Make sure your master is synced up with upstream. See [this section] [If you have forked upstream] for how to do this
+1. Make sure your master is synced up with upstream. See [this section](#If you have forked upstream) for how to do this
 2. Create new branch for your topic and switch to it. For the example issue, BZ-1234:
 
-    git checkout -b BZ-12345 master
+```
+git checkout -b BZ-12345 master
+```
 
 3. Do your work. Test. Repeat
 4. Commit your work on your topic branch
 5. Push your topic branch to GitHub. For example:
 
-    git push origin BZ-12345
+```
+git push origin BZ-12345
+```
 
 6. Issue a pull request using the [GitHub pull request system](http://help.github.com/send-pull-requests)
 7. Once your pull request has been applied upstream, delete the topic branch both locally and on your fork. For example:
 
-    git branch -d BZ-12345 && git push origin :BZ-12345
+```
+git branch -d BZ-12345 && git push origin :BZ-12345
+```
 
 8. Sync with upstream again so that your changes now appear in your master branch
 
@@ -109,22 +113,30 @@ If your topic branch has been open for a while and you are afraid changes upstre
 
 1. Sync your master branch with upstream
 
-    git checkout master
-    git pull upstream master```
+```
+git checkout master
+git pull upstream master
+```
 
 2. Switch to your topic branch. For example:
 
-    git checkout BZ-12345
+```
+git checkout BZ-12345
+```
 
 3. Rebase your topic branch against master:
 
-    git rebase master
+```
+git rebase master
+```
 
 4. During the rebase process you might need to fix conflicts;
 5. when you're done test your code again.
 6. Push your rebased topic branch to your repo on GitHub (you will likely need to force this with the _-f_ option).
 
-    git push -f origin BZ-12345
+```
+git push -f origin BZ-12345
+```
 
 7. Continue your work on your topic branch.
 
@@ -163,7 +175,7 @@ Developer A pushes `bz244` to personal JacORB fork. For example:
 
 A frequent contributor will only ever submit patches via a pull requests. The pull request will be submitted via GitHub.
 
-Frequent contributors should *always* fork the upstream project on GitHub and work off a clone of this fork. This is very similar to [#Creating a pull request on GitHub] workflow used by a [#Occasional Contributor].
+Frequent contributors should *always* fork the upstream project on GitHub and work off a clone of this fork. This is very similar to [Creating a pull request on GitHub](#Creating a pull request on GitHub) workflow used by a [#Occasional Contributor](#Occasional Contributor).
 
 ![Warning][warn] All JacORB core developers are considered frequent contributors and work off personal forks of the upstream repository. This allows for complex features to be developed in parallel without tripping up over one another. This process is certainly not restricted to just JacORB core developers; any contributor is welcome to also participate in this manner.
 
@@ -196,17 +208,17 @@ If commits need to be altered - e.g., rebasing to squash or split commits, or to
 
 ```
 $ git log --pretty=oneline --graph --abbrev-commit  # History messed up due to a bad merge
-*   3005020 Merge branch 'BZ-786' of git://github.com/Sanne/infinispan
+*   3005020 Merge branch 'BZ-786' of git://github.com/rnc/JacORB
 |\
-| * e757265 BZ-786 Make dependency to log4j optional  <-- Same with cb4e5d6 - unnecessary
-* | cb4e5d6 BZ-786 Make dependency to log4j optional  <-- Cherry-picked commit by other admin
+| * e757265 BZ-786 Make dependency to foobar optional  <-- Same with cb4e5d6 - unnecessary
+* | cb4e5d6 BZ-786 Make dependency to foobar optional  <-- Cherry-picked commit by other admin
 |/
 * ...
 
 $ git reset cb4e5d6  # revert the bad merge
 ```
 
-It is therefore *strongly recommended* that you use the [handle_pull_request](https://github.com/maniksurtani/githelpers/blob/master/project_admins/handle_pull_request) script that ensures a clean merge. If you _still_ wish to do this manually, please consider reading through the script first to get an idea of what needs to happen.
+It is therefore __strongly recommended__ that you use the [handle_pull_request](https://github.com/maniksurtani/githelpers/blob/master/project_admins/handle_pull_request) script that ensures a clean merge. If you _still_ wish to do this manually, please consider reading through the script first to get an idea of what needs to happen.
 
 More information on pulling changes from remote, forked repos can be found in [Chapter 5, Section 3](http://progit.org/book/ch5-3.html) of Pro Git, under *Checking Out Remote Branches* .
 
@@ -217,18 +229,18 @@ More information on pulling changes from remote, forked repos can be found in [C
 *  If you see "non-fast-forward updates were rejected" you shall never use "force" on upstream! It means that another patch was merged before you and you have to update your master again, and rebase again.
 *  "force" is allowed only in special maintenance circumstances. If you find you're needing it to handle a pull request, then you're doing it wrong, and the mistake might be a dangerous one! It's like the good rule of never commit when you're drunk (coding is allowed).
 
-![Error][error] __Never use force on git push__ Using _-f_ while pushing on a shared repository such as _upstream_ you could effectively erase other committed patches. Noone shall ever use this option unless unanimously approved on the public mailing list: the most dangerous aspect of it is that nobody gets any notification if this happens, and we might think issues are solved but you silently removed the fix and it's history from the repository.
+![Error][error] __Never use force on git push__ Using _-f_ while pushing on a shared repository such as _upstream_ you could effectively erase other committed patches. No-one shall ever use this option unless unanimously approved on the public mailing list: the most dangerous aspect of it is that nobody gets any notification if this happens, and we might think issues are solved but you silently removed the fix and it's history from the repository.
 {warning}
 
 #### Cutting releases
 
-Releases can only be cut by Project Admins, and must be done off a recently updated (git fetch and git pull origin) clone of the upstream repo. JacORB's release.py script takes care of the rest.
+Releases can only be cut by Project Admins, and must be done off a recently updated (git fetch and git pull origin) clone of the upstream repo.
 
 ## Committing your work
 
 ### Release branches
 
-JacORB currently has a single release branch; master. Work should never be committed directly to any of these release branches; topic branches should always be used for work, and these topic branches should be merged in.
+JacORB currently has a single primary release branch; master and a maintenance branch used by JBoss. Work should never be committed directly to any of these release branches; topic branches should always be used for work, and these topic branches should be merged in.
 
 ### Topic branches
 
@@ -238,18 +250,18 @@ Some of the biggest features of git are speed and efficiency of branching, and a
 
 #### Topic Branches Affecting More Than One Release Branch
 
-Most topic branches will only affect the a single release branch, so a topic branch should be created based off master. However, occasionally, fixes may apply to both release branches 4.2.x as well as master. In this case, the following workflow should apply:
+Most topic branches will only affect the a single release branch, so a topic branch should be created based off master. In future further release branches may be created (e.g. for maintenance purposes) and so fixes may apply to both multiple branchesr. In this case, the following workflow should apply:
 
-* Create topic branch off 4.2.x. For example:
-{code:none}git checkout -b <topic>_4.2.x 4.2.x{code}
+* Create topic branch off maintenance branch e.g. 2.3.x. For example:
+```git checkout -b <topic>_2.3.x 2.3.x```
 * Create topic branch off master. For example:
-{code:none}git checkout -b <topic>_master master{code}
+```git checkout -b <topic>_master master```
 * Do your work on `<topic>_master`, test and commit your fixes
-* Switch to `<topic>_4.2.x`. For example:
-{code:none}git checkout <topic>_4.2.x{code}
-* Cherry-pick your commit on `<topic>_master` onto `<topic>_4.2.x`. For example:
-{code}git cherry-pick <commit_id>{code}
-* Test `<topic>_4.2.x` for correctness, modify as necessary
+* Switch to `<topic>_2.3.x`. For example:
+```git checkout <topic>_4.2.x```
+* Cherry-pick your commit on `<topic>_master` onto `<topic>_2.3.x`. For example:
+```git cherry-pick <commit_id>```
+* Test `<topic>_2.3.x` for correctness, modify as necessary
 * Issue pull requests for both topic branches
 
 ### Comments
@@ -293,8 +305,8 @@ will often do the trick. You could then pull the specific branches you would nee
 ```
 $ git checkout master
 $ git pull origin master
-$ git checkout 4.2.x
-$ git pull origin 4.2.x
+$ git checkout 2.3.x
+$ git pull origin 2.3.x
 ```
 
 
@@ -329,9 +341,9 @@ $ git fetch upstream --tags
 $ git checkout master
 $ git pull upstream master
 $ git push origin master
-$ git checkout 4.2.x
-$ git pull upstream 4.2.x
-$ git push origin 4.2.x
+$ git checkout 2.3.x
+$ git pull upstream 2.3.x
+$ git push origin 2.3.x
 ```
 
 A script can do this for you - have a look at [sync_with_upstream](https://github.com/maniksurtani/githelpers/blob/master/contributors/sync_with_upstream).
@@ -348,17 +360,22 @@ $ git rebase master
 and/or
 
 ```
-$ git checkout topic_4.2.x
-$ git rebase 4.2.x
+$ git checkout topic_2.3.x
+$ git rebase 2.3.x
 ```
 
 The sync_with_upstream script can do this for you if your topic branch naming conventions match the script.
 
+## GIT Enhancements
+
+There are many ways git usage may be enhanced:
+*  Autocompletion on the command line via Bash or ZSH
+*  Custom shell prompts to display GIT repository information (again, available in Bash & ZSH)
+*  Coloring GIT Terminal output
+*  Visual tools such as gitk, qgit, Eclipe integration, etc.
+*  etc.
 
 
-
-<br/>
-<br/>
 <br/>
 <br/>
 <br/>
