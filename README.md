@@ -230,7 +230,7 @@ More information on pulling changes from remote, forked repos can be found in [C
 *  "force" is allowed only in special maintenance circumstances. If you find you're needing it to handle a pull request, then you're doing it wrong, and the mistake might be a dangerous one! It's like the good rule of never commit when you're drunk (coding is allowed).
 
 ![Error][err] __Never use force on git push__ Using _-f_ while pushing on a shared repository such as _upstream_ you could effectively erase other committed patches. No-one shall ever use this option unless unanimously approved on the public mailing list: the most dangerous aspect of it is that nobody gets any notification if this happens, and we might think issues are solved but you silently removed the fix and it's history from the repository.
-{warning}
+
 
 #### Cutting releases
 
@@ -240,7 +240,7 @@ Releases can only be cut by Project Admins, and must be done off a recently upda
 
 ### Release branches
 
-JacORB currently has a single primary release branch; master and a maintenance branch used by JBoss. Work should never be committed directly to any of these release branches; topic branches should always be used for work, and these topic branches should be merged in.
+JacORB currently has a primary release branch of master and a maintenance branch used by Red Hat JBoss. In future further release branches may be created. (e.g. for maintenance purposes). Work should never be committed directly to a release branch; topic branches should always be used for work, and these topic branches should be merged in.
 
 ### Topic branches
 
@@ -250,7 +250,7 @@ Some of the biggest features of git are speed and efficiency of branching, and a
 
 #### Topic Branches Affecting More Than One Release Branch
 
-Most topic branches will only affect the a single release branch, so a topic branch should be created based off master. In future further release branches may be created (e.g. for maintenance purposes) and so fixes may apply to both multiple branchesr. In this case, the following workflow should apply:
+Most topic branches will only affect the a single release branch, so a topic branch should be created based off master. It may be that fixes apply to multiple branches. In this case, the following workflow should apply:
 
 * Create topic branch off maintenance branch e.g. 2.3.x. For example:
 ```git checkout -b <topic>_2.3.x 2.3.x```
@@ -258,7 +258,7 @@ Most topic branches will only affect the a single release branch, so a topic bra
 ```git checkout -b <topic>_master master```
 * Do your work on `<topic>_master`, test and commit your fixes
 * Switch to `<topic>_2.3.x`. For example:
-```git checkout <topic>_4.2.x```
+```git checkout <topic>_2.3.x```
 * Cherry-pick your commit on `<topic>_master` onto `<topic>_2.3.x`. For example:
 ```git cherry-pick <commit_id>```
 * Test `<topic>_2.3.x` for correctness, modify as necessary
@@ -321,8 +321,8 @@ $ git rebase master
 and/or
 
 ```
-$ git checkout topic_4.2.x
-$ git rebase 4.2.x
+$ git checkout topic_2.3.x
+$ git rebase 2.3.x
 ```
 
 ### If you have forked upstream
@@ -330,7 +330,7 @@ $ git rebase 4.2.x
 If you have a fork of upstream, you should probably define upstream as one of your remotes:
 
 ```
-$ git remote add upstream git://github.com/infinispan/infinispan.git
+$ git remote add upstream git://github.com/JacORB/JacORB.git
 ```
 
 You should now be able to fetch and pull changes from upstream into your local repository, though you should make sure you have no uncommitted changes. (You *do* use topic branches, right?)
