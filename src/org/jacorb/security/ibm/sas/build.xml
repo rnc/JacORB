@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<project name="sas" default="all" basedir="../../../../../..">
+
+  <!-- ==================================================== -->
+  <!--                 sas build file                       -->
+  <!-- $Id$ -->
+  <!-- ==================================================== -->
+
+   <import file="${basedir}/etc/common.xml"/>
+
+   <target name="check-props">
+      <available classname="org.ietf.jgss.GSSManager" property="jgss.present" classpathref="bootclasspath" ignoresystemclasses="true" />
+      <available classname="com.tagish.auth.Utils" property="jaas.modules.present" classpathref="bootclasspath" ignoresystemclasses="true" />
+      <!-- available classname="com.ibm.security.jgss.InquireType" property="java7"  classpathref="bootclasspath" ignoresystemclasses="true" / -->
+   </target>
+
+   <!-- Unfortunately the API changed incompatibly in Java7 so we need to patch the source file -->
+   <target name="prepatch" if="java7">
+     <replace summary="true"
+              file="${src}/org/jacorb/security/ibm/sas/GSSUPContextSpi.java"
+              token="java.lang.Enum"
+              value="com.ibm.security.jgss.InquireType"/>
+   </target>
+
+   <target name="postpatch" if="java7">
+     <replace summary="true"
+              file="${src}/org/jacorb/security/ibm/sas/GSSUPContextSpi.java"
+              token="com.ibm.security./jgss.InquireType"
+              value="java.lang.Enum"/>
+   </target>
+
+   <target name="all" depends="init,check-props,compile,postpatch,jaas" />
+
+   <target name="compile" if="jgss.present">
+      <jacorb-javac javac-includes="org/jacorb/security/ibm/sas/*.java"
+      	            javac-excludes="org/jacorb/security/ibm/sas/NT_*.java"/>
+   </target>
+
+
+   <target name="jaas" if="jaas.modules.present">
+      <jacorb-javac javac-includes="org/jacorb/security/ibm/sas/NT_*.java"/>
+   </target>
+</project>
