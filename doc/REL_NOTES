@@ -61,6 +61,7 @@ This Release
     - Misc
          - Support compiling with IBM JDK
          - Add integration test suite for JacORB ImR.
+         - Default logging now supports showing class & method information.
 
 3.2
 ===
