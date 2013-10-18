@@ -199,11 +199,11 @@ public abstract class GIOPConnection
         connectTimeout =
             configuration.getAttributeAsInteger("jacorb.connection.client.connect_timeout", 90000);
 
-        List statsProviderClassNames = configuration.getAttributeList( "jacorb.connection.statistics_providers");
+        List<String> statsProviderClassNames = configuration.getAttributeList( "jacorb.connection.statistics_providers");
 
         for (Iterator<String> iter = statsProviderClassNames.iterator (); iter.hasNext ();)
         {
-            String className = (String) iter.next ();
+            String className = iter.next ();
             try
             {
                 Class<?> iclass = ObjectUtil.classForName (className);
@@ -632,7 +632,7 @@ public abstract class GIOPConnection
                 }
 
                 ByteArrayOutputStream b_out =
-                    (ByteArrayOutputStream)fragments.get( request_id );
+                    fragments.get( request_id );
 
                 //add the message contents to stream (discarding the
                 //GIOP message header and the request id ulong of the
