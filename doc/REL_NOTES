@@ -59,6 +59,7 @@
          - Fix for port / endpoint initialisation.
          - Fix for ORB instances sharing Current information.
          - Fixed SSL properties reading and processing (BZ#820).
+         - Fix for forward request handling for special operations (BZ#979)
     - Documentation
         - Minor fixes.
     - Misc
