@@ -19,6 +19,7 @@
  */
 package org.jacorb.orb.etf;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
@@ -242,6 +243,25 @@ public abstract class StreamConnectionBase
         catch (IOException ex)
         {
             throw handleCommFailure(ex);
+        }
+    }
+
+    /**
+     * Closes the parameter without throwing an exception
+     * @param c a {@link java.io.Closeable}.
+     */
+    protected void silentClose (Closeable c)
+    {
+        try
+        {
+            if ( c != null)
+            {
+                c.close();
+            }
+        }
+        catch (IOException e)
+        {
+            logger.error("Exception when closing " + this, e);
         }
     }
 

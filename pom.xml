@@ -66,9 +66,9 @@
         <gpg.keyname>6E0309600DC50C2E</gpg.keyname>
         <failIfNoTests>false</failIfNoTests>
 
-        <!-- Enforce 1.6 compaatibility -->
-        <maven.compiler.target>1.6</maven.compiler.target>
-        <maven.compiler.source>1.6</maven.compiler.source>
+        <!-- Enforce 1.7 compaatibility -->
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
 
         <datetime>${timestamp}</datetime>
     </properties>
