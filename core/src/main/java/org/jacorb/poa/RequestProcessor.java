@@ -3,7 +3,7 @@ package org.jacorb.poa;
 /*
  *        JacORB - a free Java ORB
  *
- *   Copyright (C) 1997-2014 Gerald Brose / The JacORB Team.
+ *   Copyright (C) 1997-2015 Gerald Brose / The JacORB Team.
  *
  *   This library is free software; you can redistribute it and/or
  *   modify it under the terms of the GNU Library General Public
@@ -23,7 +23,6 @@ package org.jacorb.poa;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.jacorb.config.Configurable;
 import org.jacorb.config.Configuration;
@@ -66,6 +65,71 @@ public class RequestProcessor
     extends Thread
     implements InvocationContext, Configurable
 {
+    private static final boolean JACORB_SERVANT;
+
+    /**
+     * Enumeration to represent special operations which are handled by stubs
+     */
+    public static enum SpecialOps
+    {
+        IS_A("_is_a"),
+        /**
+         * See org.jacorb.orb.Delegate.get_interface_def
+         */
+        INTERFACE("_interface"),
+        GET_POLICY("_get_policy"),
+        NON_EXISTENT("_non_existent"),
+        GET_COMPONENT("_get_component"),
+        REPO_ID("_repository_id"),
+        SET_POLICY("_set_policy_overrides");
+
+        private final String operation;
+
+        private static final Map<String, SpecialOps> map = new HashMap<>();
+
+        static SpecialOps getSpecialOperation (String cf) throws ConfigurationException
+        {
+            return map.get(cf);
+        }
+
+        SpecialOps(String operation)
+        {
+            this.operation = operation;
+        }
+
+        public String toString()
+        {
+            return operation;
+        }
+    }
+
+    /**
+     * ID for RequestProcessor
+     */
+    private static int count = 0;
+
+    static
+    {
+        for (SpecialOps type : SpecialOps.values())
+        {
+            SpecialOps.map.put(type.operation, type);
+        }
+
+        boolean using_jacorb_servant1;
+        try
+        {
+            org.omg.PortableServer.Servant.class.getMethod("_repository_id");
+            // using JacORB supplied CORBA classes
+            using_jacorb_servant1 = true;
+        }
+        catch (java.lang.NoSuchMethodException ex)
+        {
+            // not using JacORB supplied CORBA classes
+            using_jacorb_servant1 = false;
+        }
+        JACORB_SERVANT = using_jacorb_servant1;
+    }
+
     private boolean start;
     private boolean terminate;
     private final RPPoolManager poolManager;
@@ -93,46 +157,6 @@ public class RequestProcessor
 
     /** this processor's logger instance, obtained from the request controller */
     private Logger logger;
-
-    /**
-     * ID for RequestProcessor
-     */
-    private static int count = 0;
-
-    private enum SpecialOps { 
-    	IS_A, 
-    	INTERFACE, 
-    	NON_EXISTENT, 
-    	GET_POLICY, 
-    	SET_POLICY, 
-    	GET_COMPONENT, 
-    	REPO_ID
-    };
-    
-    private final static Map<String, SpecialOps> specialOperations;
-
-    private static boolean using_jacorb_servant = false;
-
-    static
-    {
-        specialOperations = new HashMap<String, SpecialOps> (10);
-        specialOperations.put("_is_a", SpecialOps.IS_A);
-        specialOperations.put("_interface", SpecialOps.INTERFACE);
-        specialOperations.put("_non_existent", SpecialOps.NON_EXISTENT);
-        specialOperations.put("_get_policy", SpecialOps.GET_POLICY);
-        specialOperations.put("_set_policy_overrides", SpecialOps.SET_POLICY);
-        specialOperations.put("_get_component", SpecialOps.GET_COMPONENT);
-        specialOperations.put("_repository_id", SpecialOps.REPO_ID);
-        
-        try {
-          org.omg.PortableServer.Servant.class.getMethod("_repository_id");
-          // using JacORB supplied CORBA classes
-          using_jacorb_servant = true;
-        }
-        catch (java.lang.NoSuchMethodException ex) {
-          // not using JacORB supplied CORBA classes
-        }        
-    }
 
     RequestProcessor (RPPoolManager _poolManager)
     {
@@ -343,11 +367,11 @@ public class RequestProcessor
                                  " invokeOperation on servant (stream based)");
                 }
 
-                SpecialOps special_op = specialOperations.get(operation);
-                
-                if (special_op != null)
+                SpecialOps specOp = SpecialOps.getSpecialOperation(operation);
+
+                if ( specOp != null)
                 {
-                    if (special_op == SpecialOps.GET_POLICY)
+                    if (specOp == SpecialOps.GET_POLICY)
                     {
                         // Check the number of args. If zero, then we assuming it's a "_get_policy"
                         // operation that was generated for an attribute named 'policy', instead
@@ -357,8 +381,8 @@ public class RequestProcessor
                             specialOperation = true;
                         }
                     }
-                    else if (using_jacorb_servant ||
-                                !(special_op == SpecialOps.REPO_ID || special_op == SpecialOps.GET_COMPONENT))
+                    else if (JACORB_SERVANT ||
+                        !(specOp == SpecialOps.REPO_ID || specOp == SpecialOps.GET_COMPONENT))
                     {
                         specialOperation = true;
                     }
@@ -387,11 +411,13 @@ public class RequestProcessor
                                  " opname: " + operation +
                                  " invoke operation on servant (dsi based)");
                 }
-                SpecialOps special_op = specialOperations.get(operation);
-                if (special_op != null &&
-                    !(servant instanceof org.jacorb.orb.Forwarder) &&
-                    (using_jacorb_servant || 
-                        !(special_op == SpecialOps.REPO_ID || special_op == SpecialOps.GET_COMPONENT)))
+
+                SpecialOps specOps = SpecialOps.getSpecialOperation(operation);
+
+                if (specOps != null &&
+                        !(servant instanceof org.jacorb.orb.Forwarder) &&
+                        (JACORB_SERVANT ||
+                            !(specOps == SpecialOps.REPO_ID || specOps == SpecialOps.GET_COMPONENT)))
                 {
                     ((org.jacorb.orb.ServantDelegate)servant._get_delegate())
                         ._invoke(servant,
@@ -657,7 +683,7 @@ public class RequestProcessor
             {
                 invokePreInvoke();
             }
-            ((org.omg.CORBA_2_3.ORB)orb).set_delegate(servant);
+            orb.set_delegate(servant);
         }
 
         if (servant != null)
