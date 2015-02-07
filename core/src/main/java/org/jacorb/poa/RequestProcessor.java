@@ -21,8 +21,6 @@ package org.jacorb.poa;
  */
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.jacorb.config.Configurable;
 import org.jacorb.config.Configuration;
@@ -50,8 +48,8 @@ import org.omg.PortableServer.DynamicImplementation;
 import org.omg.PortableServer.Servant;
 import org.omg.PortableServer.ServantActivator;
 import org.omg.PortableServer.ServantLocator;
-import org.omg.PortableServer.ServantManager;
 import org.omg.PortableServer.ServantLocatorPackage.CookieHolder;
+import org.omg.PortableServer.ServantManager;
 import org.slf4j.Logger;
 
 /**
@@ -68,53 +66,12 @@ public class RequestProcessor
     private static final boolean JACORB_SERVANT;
 
     /**
-     * Enumeration to represent special operations which are handled by stubs
-     */
-    public static enum SpecialOps
-    {
-        IS_A("_is_a"),
-        /**
-         * See org.jacorb.orb.Delegate.get_interface_def
-         */
-        INTERFACE("_interface"),
-        GET_POLICY("_get_policy"),
-        NON_EXISTENT("_non_existent"),
-        GET_COMPONENT("_get_component"),
-        REPO_ID("_repository_id"),
-        SET_POLICY("_set_policy_overrides");
-
-        private final String operation;
-
-        private static final Map<String, SpecialOps> map = new HashMap<>();
-
-        static SpecialOps getSpecialOperation (String cf) throws ConfigurationException
-        {
-            return map.get(cf);
-        }
-
-        SpecialOps(String operation)
-        {
-            this.operation = operation;
-        }
-
-        public String toString()
-        {
-            return operation;
-        }
-    }
-
-    /**
      * ID for RequestProcessor
      */
     private static int count = 0;
 
     static
     {
-        for (SpecialOps type : SpecialOps.values())
-        {
-            SpecialOps.map.put(type.operation, type);
-        }
-
         boolean using_jacorb_servant1;
         try
         {
@@ -367,11 +324,25 @@ public class RequestProcessor
                                  " invokeOperation on servant (stream based)");
                 }
 
-                SpecialOps specOp = SpecialOps.getSpecialOperation(operation);
-
-                if ( specOp != null)
+                switch (operation)
                 {
-                    if (specOp == SpecialOps.GET_POLICY)
+                    case "_interface":
+                    case "_non_existent":
+                    case "_set_policy_overrides":
+                    {
+                        specialOperation = true;
+                        break;
+                    }
+                    case "_get_component":
+                    case "_repository_id":
+                    {
+                        if (JACORB_SERVANT)
+                        {
+                            specialOperation = true;
+                        }
+                        break;
+                    }
+                    case "_get_policy":
                     {
                         // Check the number of args. If zero, then we assuming it's a "_get_policy"
                         // operation that was generated for an attribute named 'policy', instead
@@ -380,11 +351,7 @@ public class RequestProcessor
                         {
                             specialOperation = true;
                         }
-                    }
-                    else if (JACORB_SERVANT ||
-                        !(specOp == SpecialOps.REPO_ID || specOp == SpecialOps.GET_COMPONENT))
-                    {
-                        specialOperation = true;
+                        break;
                     }
                 }
 
@@ -412,12 +379,28 @@ public class RequestProcessor
                                  " invoke operation on servant (dsi based)");
                 }
 
-                SpecialOps specOps = SpecialOps.getSpecialOperation(operation);
+                switch (operation)
+                {
+                    case "_interface":
+                    case "_non_existent":
+                    case "_set_policy_overrides":
+                    case "_get_policy":
+                    {
+                        specialOperation = true;
+                        break;
+                    }
+                    case "_get_component":
+                    case "_repository_id":
+                    {
+                        if (JACORB_SERVANT)
+                        {
+                            specialOperation = true;
+                        }
+                        break;
+                    }
+                }
 
-                if (specOps != null &&
-                        !(servant instanceof org.jacorb.orb.Forwarder) &&
-                        (JACORB_SERVANT ||
-                            !(specOps == SpecialOps.REPO_ID || specOps == SpecialOps.GET_COMPONENT)))
+                if (specialOperation && ! (servant instanceof org.jacorb.orb.Forwarder) )
                 {
                     ((org.jacorb.orb.ServantDelegate)servant._get_delegate())
                         ._invoke(servant,
