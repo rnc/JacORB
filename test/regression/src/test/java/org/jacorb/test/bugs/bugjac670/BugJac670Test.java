@@ -118,6 +118,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
 
               if (i == 5)
               {
+                 TestUtils.getLogger().debug ("Shutting down server");
                  serverSetUp.tearDown ();
                  Thread.sleep (5000);
               }
