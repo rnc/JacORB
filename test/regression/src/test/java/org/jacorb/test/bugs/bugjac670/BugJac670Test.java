@@ -96,7 +96,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
        throws Exception
     {
         server = clearPolicies (server);
-        server = setRelativeRoundtripTimeout (server, TestUtils.isWindows () ? 30000 : 12000);
+        server = setRelativeRoundtripTimeout (server, 30000);
 
         try
         {
