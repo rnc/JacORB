@@ -39,7 +39,6 @@ public class BugJac670Test extends FixedPortClientServerTestCase
 
          Properties serverprops = new java.util.Properties();
          serverprops.setProperty( "ORBInitRef.balancer", "corbaloc::localhost:" + port + "/GSLBService");
-         serverprops.setProperty("java.net.preferIPv4Stack","true");
          serverprops.setProperty ("jacorb.test.timeout.server", Long.toString(15000));
 
          serverSetUp = new ServerSetup ("org.jacorb.test.bugs.bugjac670.GreetingServiceServer",
@@ -64,12 +63,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
         Properties clientprops = new java.util.Properties();
         clientprops.setProperty( "ORBInitRef.greeting",
                                  "corbaloc::localhost:" + port + "/GSLBService");
-        clientprops.setProperty("java.net.preferIPv4Stack","true");
-        clientprops.setProperty("jacorb.connection.client.timeout_ignores_pending_messages" , "true");
-        clientprops.setProperty("jacorb.connection.client.keepalive" , "true");
 
         Properties serverprops = new java.util.Properties();
-        serverprops.setProperty("java.net.preferIPv4Stack","true");
         serverprops.setProperty( "org.omg.PortableInterceptor.ORBInitializerClass."
                                  + org.jacorb.test.bugs.bugjac670.GSLoadBalancerInitializer.class.getName(), "" );
         serverprops.setProperty("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
