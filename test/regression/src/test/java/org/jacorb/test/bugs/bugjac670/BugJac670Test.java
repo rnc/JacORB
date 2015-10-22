@@ -93,7 +93,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
        throws Exception
     {
         server = clearPolicies (server);
-        server = setRelativeRoundtripTimeout (server, 30000);
+        server = setRelativeRoundtripTimeout (server, TestUtils.isWindows () ? 30000 : 12000);
 
         try
         {
@@ -118,7 +118,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
                  TestUtils.getLogger().debug ("Shutting down server");
                  serverSetUp.tearDown ();
                  TestUtils.getLogger().debug ("Waiting...");
-                 Thread.sleep (10000);
+                 Thread.sleep (5000);
               }
            }
         }
@@ -155,7 +155,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
 
               if (i == 5)
               {
-                 serverSetUp.tearDown ();
+                  TestUtils.getLogger().debug ("Shutting down server");
+                  serverSetUp.tearDown ();
               }
            }
 
@@ -172,7 +173,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
         org.omg.CORBA.Object r = server._set_policy_override (new Policy[]{},
                                                               SetOverrideType.SET_OVERRIDE);
 
-        server._release();
+        //server._release();
 
         return GreetingServiceHelper.narrow (r);
     }
@@ -192,7 +193,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
             org.omg.CORBA.Object r = server._set_policy_override (new Policy[]{ policy },
                                                                   SetOverrideType.ADD_OVERRIDE);
 
-            server._release();
+            //server._release();
             
             return GreetingServiceHelper.narrow (r);
         }
