@@ -222,6 +222,7 @@ public class ClientConnection
     public synchronized void incClients()
     {
         client_count++;
+        logger.debug ("### Incrementing " + getGIOPConnection().toString() + " and clients " + client_count);
     }
 
     /**
@@ -239,6 +240,8 @@ public class ClientConnection
         {
             result = true;
         }
+
+        logger.debug ("### Releasing " + getGIOPConnection().toString() + " and clients " + client_count);
         return result;
     }
 

@@ -542,6 +542,7 @@ public final class Delegate
                 connections[TransportType.IIOP.ordinal ()] = conn_mg.getConnection(profile);
             }
 
+            logger.debug ("### Retrieved connection for profile " + profile + " with Delegate " + this + " for connection " + connections[TransportType.IIOP.ordinal ()]);
             bound = true;
 
             /* The delegate could query the server for the object
