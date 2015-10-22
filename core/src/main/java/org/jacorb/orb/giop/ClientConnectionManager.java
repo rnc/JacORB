@@ -110,6 +110,7 @@ public class ClientConnectionManager
         // Don't return a closed connection.
         if (clientConnection != null && clientConnection.isClosed())
         {
+            logger.debug ("ClientConnection is already closed so releasing it: " + clientConnection.getGIOPConnection().toString());
             releaseConnection (clientConnection);
             clientConnection = null;
         }
