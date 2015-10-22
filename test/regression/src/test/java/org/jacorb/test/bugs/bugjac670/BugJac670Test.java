@@ -65,6 +65,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
         clientprops.setProperty( "ORBInitRef.greeting",
                                  "corbaloc::localhost:" + port + "/GSLBService");
         clientprops.setProperty("java.net.preferIPv4Stack","true");
+        clientprops.setProperty("jacorb.connection.client.timeout_ignores_pending_messages" , "true");
+        clientprops.setProperty("jacorb.connection.client.keepalive" , "true");
 
         Properties serverprops = new java.util.Properties();
         serverprops.setProperty("java.net.preferIPv4Stack","true");
@@ -120,7 +122,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
               {
                  TestUtils.getLogger().debug ("Shutting down server");
                  serverSetUp.tearDown ();
-                 Thread.sleep (5000);
+                 TestUtils.getLogger().debug ("Waiting...");
+                 Thread.sleep (10000);
               }
            }
         }
@@ -174,6 +177,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
         org.omg.CORBA.Object r = server._set_policy_override (new Policy[]{},
                                                               SetOverrideType.SET_OVERRIDE);
 
+        server._release();
+
         return GreetingServiceHelper.narrow (r);
     }
 
@@ -192,6 +197,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
             org.omg.CORBA.Object r = server._set_policy_override (new Policy[]{ policy },
                                                                   SetOverrideType.ADD_OVERRIDE);
 
+            server._release();
+            
             return GreetingServiceHelper.narrow (r);
         }
         catch (PolicyError e)
