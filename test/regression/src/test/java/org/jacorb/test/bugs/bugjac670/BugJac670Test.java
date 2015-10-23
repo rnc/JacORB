@@ -103,14 +103,6 @@ public class BugJac670Test extends FixedPortClientServerTestCase
            {
               server.greeting ("Hello");
 
-              try
-              {
-                 Thread.sleep (3000);
-              }
-              catch (InterruptedException ie)
-              {
-              }
-
               i++;
 
               if (i == 5)
@@ -133,7 +125,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
        throws Exception
     {
         server = clearPolicies (server);
-        server = setRelativeRoundtripTimeout (server, 2000);
+        server = setRelativeRoundtripTimeout (server, 200);
 
         try
         {
@@ -142,14 +134,6 @@ public class BugJac670Test extends FixedPortClientServerTestCase
            while (i < 10)
            {
               server.greeting ("Hello");
-
-              try
-              {
-                 Thread.sleep (3000);
-              }
-              catch (InterruptedException ie)
-              {
-              }
 
               i++;
 
@@ -162,6 +146,10 @@ public class BugJac670Test extends FixedPortClientServerTestCase
 
            fail ("TIMEOUT expected");
         }
+        catch (org.omg.CORBA.COMM_FAILURE t)
+        {
+            // Under JDK 7 and above we seem to catch this.
+        }
         catch (org.omg.CORBA.TIMEOUT t)
         {
            // OK
@@ -173,7 +161,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
         org.omg.CORBA.Object r = server._set_policy_override (new Policy[]{},
                                                               SetOverrideType.SET_OVERRIDE);
 
-        //server._release();
+        server._release();
 
         return GreetingServiceHelper.narrow (r);
     }
@@ -193,8 +181,8 @@ public class BugJac670Test extends FixedPortClientServerTestCase
             org.omg.CORBA.Object r = server._set_policy_override (new Policy[]{ policy },
                                                                   SetOverrideType.ADD_OVERRIDE);
 
-            //server._release();
-            
+            server._release();
+
             return GreetingServiceHelper.narrow (r);
         }
         catch (PolicyError e)
