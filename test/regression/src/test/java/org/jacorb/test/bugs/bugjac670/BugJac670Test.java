@@ -141,6 +141,7 @@ public class BugJac670Test extends FixedPortClientServerTestCase
               {
                   TestUtils.getLogger().debug ("Shutting down server");
                   serverSetUp.tearDown ();
+                  server._release();
               }
            }
 
