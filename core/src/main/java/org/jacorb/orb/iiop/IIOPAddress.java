@@ -18,6 +18,7 @@ package org.jacorb.orb.iiop;
  * USA.
  */
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -665,13 +666,16 @@ public class IIOPAddress extends ProtocolAddressBase
                     {
                         InetAddress addr = addrList.nextElement();
 
-                        if (!addr.isLoopbackAddress() && !addr.isLinkLocalAddress())
+                        if ( !(addr instanceof Inet6Address))
                         {
-                            result.addLast(addr);
-                        }
-                        else
-                        {
-                            p2ploopback.addLast(addr);
+                            if (!addr.isLoopbackAddress() && !addr.isLinkLocalAddress())
+                            {
+                                result.addLast(addr);
+                            }
+                            else
+                            {
+                                p2ploopback.addLast(addr);
+                            }
                         }
                     }
                 }
